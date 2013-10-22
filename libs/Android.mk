@@ -1,0 +1,6 @@
+LOCAL_PATH := $(my-dir)
+include $(CLEAR_VARS)
+
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := gson:gson-2.2.2.jar
+
+include $(BUILD_MULTI_PREBUILT) 
