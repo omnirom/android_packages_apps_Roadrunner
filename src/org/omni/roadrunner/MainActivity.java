@@ -30,6 +30,8 @@ import android.view.MenuItem;
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+	private Fragment mBodyFragment;
+	
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -63,22 +65,21 @@ public class MainActivity extends Activity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-    	Fragment frag = null;
     	switch (position) {
     	case 0:
-    		frag = new StatisticsFragment();
+    		mBodyFragment = StatisticsFragment.newInstance(null, null);
     		break;
     		
     	case 1:
-    		frag = new PowerProfileFragment();
+    		mBodyFragment = PowerProfileFragment.newInstance();
     		break;
     		
     	case 2:
-    		frag = new WakelocksFragment();
+    		mBodyFragment = WakelocksFragment.newInstance();
     		break;
     		
     	case 3:
-    		frag = new AlarmsFragment();
+    		mBodyFragment = AlarmsFragment.newInstance();
     		break;
     		
     	default:
@@ -88,7 +89,7 @@ public class MainActivity extends Activity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, frag)
+                .replace(R.id.container, mBodyFragment)
                 .commit();
         
         // update title
@@ -111,7 +112,7 @@ public class MainActivity extends Activity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
+        	mBodyFragment.onCreateOptionsMenu(menu, getMenuInflater());
             restoreActionBar();
             return true;
         }
@@ -121,8 +122,15 @@ public class MainActivity extends Activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // automatically handle clicks on the Home/Up button.
+    	
+    	// We first make it go through our body fragment actions
+    	if (mBodyFragment != null) {
+    		if (mBodyFragment.onOptionsItemSelected(item)) {
+    			return true;
+    		}
+    	}
+    	
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;

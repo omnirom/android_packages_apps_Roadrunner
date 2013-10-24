@@ -19,8 +19,12 @@
 package org.omni.roadrunner;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -46,6 +50,23 @@ public class PowerProfileFragment extends Fragment {
 
 	public PowerProfileFragment() {
 		// Required empty public constructor
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.power_profile, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_new_profile:
+			startActivity(new Intent(getActivity(), ProfileSetupActivity.class));
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override

@@ -1,0 +1,92 @@
+<!--
+  Copyright (C) 2013 The OmniROM Project
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- Synchronization settings -->
+    <PreferenceCategory android:title="Synchronization" >
+        <Preference android:title="Per-app settings"
+            android:summary="Change the way your apps synchronize in this mode">
+            <intent android:action="android.settings.SYNC_SETTINGS" />
+        </Preference>
+    </PreferenceCategory>
+    
+    <!-- Hardware components disablation -->
+    <PreferenceCategory android:title="Hardware" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key=""
+            android:title="Disable Bluetooth" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key=""
+            android:title="Disable NFC" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key=""
+            android:title="Disable Bluetooth" />
+    </PreferenceCategory>
+
+    <ListPreference
+        android:defaultValue="180"
+        android:entries="@array/pref_sync_frequency_titles"
+        android:entryValues="@array/pref_sync_frequency_values"
+        android:key="sync_frequency"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_sync_frequency" />
+
+    <!--
+         This preference simply launches an intent when selected. Use this UI sparingly, per
+         design guidelines.
+    -->
+    <Preference android:title="@string/pref_title_system_sync_settings" >
+        <intent android:action="android.settings.SYNC_SETTINGS" />
+    </Preference>
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="example_checkbox"
+        android:summary="@string/pref_description_social_recommendations"
+        android:title="@string/pref_title_social_recommendations" />
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="@string/pref_default_display_name"
+        android:inputType="textCapWords"
+        android:key="example_text"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_title_display_name" />
+
+    <!--
+         NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+         dismiss it.
+    -->
+    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+    <ListPreference
+        android:defaultValue="-1"
+        android:entries="@array/pref_example_list_titles"
+        android:entryValues="@array/pref_example_list_values"
+        android:key="example_list"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_add_friends_to_messages" />
+
+</PreferenceScreen>
