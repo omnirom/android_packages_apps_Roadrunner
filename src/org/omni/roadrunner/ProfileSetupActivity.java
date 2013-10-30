@@ -13,14 +13,35 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class ProfileSetupActivity extends PreferenceActivity {
+
+    public static final String EXTRA_PROFILE_ID = "uniqueId";
+
+    // keep in tune with xml
+    public static final String KEY_DISABLE_WIFI = "disable_wifi";
+    public static final String KEY_DISABLE_BLUETOOTH = "disable_bluetooth";
+    public static final String KEY_DISABLE_NFC = "disable_nfc";
+    public static final String KEY_PROFILE_NAME = "profile_name";
+
 
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
+        if (getIntent().hasExtra(EXTRA_PROFILE_ID)) {
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                int profileId = extras.getInt(EXTRA_PROFILE_ID);
+                getPreferenceManager().setSharedPreferencesName(String.format("Profile_%d", profileId));
+            }
+        } else {
+            Toast.makeText(this, "ERR: No UniqueID!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
 		addPreferencesFromResource(R.xml.pref_power_profile);
 		bindPreferenceSummaryToValue(findPreference("disable_wifi"));
 		bindPreferenceSummaryToValue(findPreference("profile_name"));

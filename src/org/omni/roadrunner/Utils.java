@@ -20,4 +20,6 @@ package org.omni.roadrunner;
 
 public class Utils {
 	public static final boolean DEBUG = true;
+
+    public static final String KEY_POWER_PROFILE_SETTINGS = "power_profile_settings";
 }
