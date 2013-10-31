@@ -27,10 +27,14 @@
 
     <!-- Synchronization settings -->
     <PreferenceCategory android:title="Synchronization" >
-        <Preference android:title="Per-app settings"
-            android:summary="Change the way your apps synchronize in this mode">
-            <intent android:action="android.settings.SYNC_SETTINGS" />
-        </Preference>
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/pref_profile_sync_freq_titles"
+            android:entryValues="@array/pref_profile_sync_freq_values"
+            android:key="sync_frequency"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="Synchronization frequency" />
     </PreferenceCategory>
     
     <!-- Hardware components disablation -->

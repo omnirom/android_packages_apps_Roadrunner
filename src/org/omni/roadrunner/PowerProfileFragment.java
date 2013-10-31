@@ -34,7 +34,6 @@ import org.omni.roadrunner.adapters.PowerProfilesAdapter;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * A simple {@link android.support.v4.app.Fragment} subclass
@@ -67,7 +66,7 @@ public class PowerProfileFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_new_profile:
-                SharedPreferences sp = getActivity().getSharedPreferences(Utils.KEY_POWER_PROFILE_SETTINGS, 0);
+                SharedPreferences sp = getActivity().getSharedPreferences(Constants.KEY_POWER_PROFILE_SETTINGS, 0);
 
                 // Find a free profile ID
                 int newProfileId = 0;

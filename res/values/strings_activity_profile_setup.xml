@@ -17,4 +17,17 @@
         <item>3</item>
     </string-array>
 
+
+    <string-array name="pref_profile_sync_freq_titles">
+        <item>Disabled</item>
+        <item>When screen is on</item>
+        <item>Every 6 hours</item>
+        <item>Normal</item>
+    </string-array>
+    <string-array name="pref_profile_sync_freq_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

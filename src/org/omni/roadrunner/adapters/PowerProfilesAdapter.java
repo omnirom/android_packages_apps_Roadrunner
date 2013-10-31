@@ -18,22 +18,25 @@
 
 package org.omni.roadrunner.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
-import android.widget.TextView;
 
+import org.omni.roadrunner.Constants;
 import org.omni.roadrunner.PowerProfileFragment;
 import org.omni.roadrunner.ProfileSetupActivity;
-import org.omni.roadrunner.Utils;
-import org.omni.roadrunner.WakelocksFragment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 public class PowerProfilesAdapter extends BaseAdapter {
@@ -44,6 +47,7 @@ public class PowerProfilesAdapter extends BaseAdapter {
     private ArrayList<ProfileLineData> mProfilesData;
 
     private static class ProfileLineData {
+        int id;
         String title;
     }
 
@@ -53,28 +57,30 @@ public class PowerProfilesAdapter extends BaseAdapter {
     }
 
     public boolean update() {
-        SharedPreferences sp = mContext.getSharedPreferences(Utils.KEY_POWER_PROFILE_SETTINGS, 0);
+        SharedPreferences sp = mContext.getSharedPreferences(Constants.KEY_POWER_PROFILE_SETTINGS, 0);
         Set<String> profilesId = sp.getStringSet(PowerProfileFragment.KEY_PROFILE_IDS, null);
 
         mProfilesData = new ArrayList<ProfileLineData>();
 
-        Log.e(LOG_TAG, "There are " + profilesId.size() + " profiles");
+        if (Constants.DEBUG) Log.d(LOG_TAG, "There are " + profilesId.size() + " profiles");
 
         if (profilesId != null) {
             for (String id : profilesId) {
                 SharedPreferences profile = mContext.getSharedPreferences("Profile_" + id, 0);
                 if (profile == null) {
-                    Log.e(LOG_TAG, "The profile " + id + " is stored in the ID set, but there is" +
+                    Log.e(LOG_TAG, "The profile " + id + " is stored in the ID set, but there is " +
                             "no profile data linked!");
                     continue;
                 }
 
                 ProfileLineData line = new ProfileLineData();
                 line.title = profile.getString(ProfileSetupActivity.KEY_PROFILE_NAME, "Error");
+                line.id = Integer.parseInt(id);
                 mProfilesData.add(line);
             }
         }
 
+        notifyDataSetChanged();
         return true;
     }
 
@@ -112,10 +118,50 @@ public class PowerProfilesAdapter extends BaseAdapter {
                     parent, false);
         }
 
-
         ((CheckedTextView) convertView).setText(item.title);
 
+        convertView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                makeLongPressDialog(item);
+                return true;
+            }
+        });
+
         return convertView;
+    }
+
+    private void makeLongPressDialog(final ProfileLineData line) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle(line.title)
+                .setItems(new String[]{"Edit", "Delete"}, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            Intent intent = new Intent(mContext, ProfileSetupActivity.class);
+                            intent.putExtra(ProfileSetupActivity.EXTRA_PROFILE_ID, line.id);
+                            mContext.startActivity(intent);
+                        } else if (which == 1) {
+                            SharedPreferences sp = mContext.getSharedPreferences(Constants.KEY_POWER_PROFILE_SETTINGS, 0);
+                            Set<String> profilesId = new HashSet<String>(sp.getStringSet(PowerProfileFragment.KEY_PROFILE_IDS, new HashSet<String>()));
+
+                            profilesId.remove(Integer.toString(line.id));
+
+                            Log.e(LOG_TAG, "After delete, " + profilesId.size());
+
+                            SharedPreferences.Editor edit = sp.edit();
+                            edit.putStringSet(PowerProfileFragment.KEY_PROFILE_IDS, profilesId);
+                            edit.commit();
+
+                            new Handler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    update();
+                                }
+                            });
+                        }
+                    }
+                });
+        builder.create().show();
     }
 
 }

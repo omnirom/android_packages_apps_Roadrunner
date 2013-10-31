@@ -30,8 +30,8 @@ import android.view.MenuItem;
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-	private Fragment mBodyFragment;
-	
+    private Fragment mBodyFragment;
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -41,9 +41,9 @@ public class MainActivity extends Activity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    
+
     private String[] mSections = null;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,48 +53,48 @@ public class MainActivity extends Activity
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mSections = getResources().getStringArray(R.array.nav_drawer_items);
         mTitle = getTitle();
-        
+
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-        
-        
+
+
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-    	switch (position) {
-    	case 0:
-    		mBodyFragment = StatisticsFragment.newInstance(null, null);
-    		break;
-    		
-    	case 1:
-    		mBodyFragment = PowerProfileFragment.newInstance();
-    		break;
-    		
-    	case 2:
-    		mBodyFragment = WakelocksFragment.newInstance();
-    		break;
-    		
-    	case 3:
-    		mBodyFragment = AlarmsFragment.newInstance();
-    		break;
-    		
-    	default:
-    		throw new RuntimeException("Unknown sidebar element!");
-    	}
-    	
+        switch (position) {
+            case 0:
+                mBodyFragment = StatisticsFragment.newInstance(null, null);
+                break;
+
+            case 1:
+                mBodyFragment = PowerProfileFragment.newInstance();
+                break;
+
+            case 2:
+                mBodyFragment = WakelocksFragment.newInstance();
+                break;
+
+            case 3:
+                mBodyFragment = AlarmsFragment.newInstance();
+                break;
+
+            default:
+                throw new RuntimeException("Unknown sidebar element!");
+        }
+
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, mBodyFragment)
                 .commit();
-        
+
         // update title
         if (mSections != null) {
-        	mTitle = mSections[position];
+            mTitle = mSections[position];
         }
     }
 
@@ -112,7 +112,7 @@ public class MainActivity extends Activity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-        	mBodyFragment.onCreateOptionsMenu(menu, getMenuInflater());
+            mBodyFragment.onCreateOptionsMenu(menu, getMenuInflater());
             restoreActionBar();
             return true;
         }
@@ -123,14 +123,14 @@ public class MainActivity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button.
-    	
-    	// We first make it go through our body fragment actions
-    	if (mBodyFragment != null) {
-    		if (mBodyFragment.onOptionsItemSelected(item)) {
-    			return true;
-    		}
-    	}
-    	
+
+        // We first make it go through our body fragment actions
+        if (mBodyFragment != null) {
+            if (mBodyFragment.onOptionsItemSelected(item)) {
+                return true;
+            }
+        }
+
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
