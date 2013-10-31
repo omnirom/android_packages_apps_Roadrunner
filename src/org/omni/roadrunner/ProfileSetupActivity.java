@@ -10,6 +10,9 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 
 public class ProfileSetupActivity extends PreferenceActivity {
@@ -19,11 +22,9 @@ public class ProfileSetupActivity extends PreferenceActivity {
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.pref_power_profile);
-		bindPreferenceSummaryToValue(findPreference("sync_frequency"));
-		bindPreferenceSummaryToValue(findPreference("example_text"));
-		bindPreferenceSummaryToValue(findPreference("example_list"));
+		bindPreferenceSummaryToValue(findPreference("disable_wifi"));
+		bindPreferenceSummaryToValue(findPreference("profile_name"));
 	}
-
 
 	/** {@inheritDoc} */
 	@Override
@@ -50,29 +51,6 @@ public class ProfileSetupActivity extends PreferenceActivity {
 				preference
 						.setSummary(index >= 0 ? listPreference.getEntries()[index]
 								: null);
-
-			} else if (preference instanceof RingtonePreference) {
-				// For ringtone preferences, look up the correct display value
-				// using RingtoneManager.
-				if (TextUtils.isEmpty(stringValue)) {
-					// Empty values correspond to 'silent' (no ringtone).
-					preference.setSummary(R.string.pref_ringtone_silent);
-
-				} else {
-					Ringtone ringtone = RingtoneManager.getRingtone(
-							preference.getContext(), Uri.parse(stringValue));
-
-					if (ringtone == null) {
-						// Clear the summary if there was a lookup error.
-						preference.setSummary(null);
-					} else {
-						// Set the summary to reflect the new ringtone display
-						// name.
-						String name = ringtone
-								.getTitle(preference.getContext());
-						preference.setSummary(name);
-					}
-				}
 
 			} else {
 				// For all other preferences, set the summary to the value's
